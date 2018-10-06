@@ -15,13 +15,14 @@
  */
 
 #include "monster_generated.h"  // Already includes "flatbuffers/flatbuffers.h".
+#include "edgestore_generated.h"
 #include "flatbuffers/util.h"
 
 using namespace MyGame::Sample;
 
 // Example how to use FlatBuffers to create and read binary buffers.
 
-int main(int /*argc*/, const char * /*argv*/ []) {
+int mainOne(int /*argc*/, const char * /*argv*/ []) {
     // Build up a serialized buffer algorithmically:
     flatbuffers::FlatBufferBuilder builder;
     flatbuffers::FlatBufferBuilder builder2;
@@ -130,4 +131,41 @@ int main(int /*argc*/, const char * /*argv*/ []) {
     (void)equipped;
 
     printf("The FlatBuffer was successfully created and verified!\n");
+}
+
+int main(){
+    flatbuffers::FlatBufferBuilder builder;
+    std::vector<long> longvectorone;
+    std::vector<long> longvectortwo;
+
+    std::string fileName = "edgeStore.db";
+
+    long keyOne = 34;
+    long keyTwo = 89;
+    longvectorone.push_back(45);
+    longvectorone.push_back(59);
+    longvectortwo.push_back(77);
+    longvectortwo.push_back(99);
+
+
+    auto vectorValuesOne = builder.CreateVector(longvectorone);
+    auto vectorValuesTwo = builder.CreateVector(longvectortwo);
+
+    auto edgeStoreEntryOne = CreateEdgeStoreEntry(builder,keyOne,vectorValuesOne);
+    auto edgeStoreEntryTwo = CreateEdgeStoreEntry(builder,keyTwo,vectorValuesTwo);
+
+    std::vector<flatbuffers::Offset<EdgeStoreEntry>> edgeStoreEntriesVector;
+    edgeStoreEntriesVector.push_back(edgeStoreEntryOne);
+    edgeStoreEntriesVector.push_back(edgeStoreEntryTwo);
+
+    auto flatbufferEdgeStoreEntryVector = builder.CreateVector(edgeStoreEntriesVector);
+
+    auto edgeStore = CreateEdgeStore(builder,flatbufferEdgeStoreEntryVector);
+
+    builder.Finish(edgeStore);
+
+    flatbuffers::SaveFile(fileName.c_str(),(const char *)builder.GetBufferPointer(),(size_t)builder.GetSize(),true);
+
+    printf("Successfully Completed");
+
 }
