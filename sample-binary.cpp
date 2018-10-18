@@ -17,6 +17,8 @@
 #include "monster_generated.h"  // Already includes "flatbuffers/flatbuffers.h".
 #include "edgestore_generated.h"
 #include "flatbuffers/util.h"
+#include <map>
+#include <unordered_set>
 
 using namespace MyGame::Sample;
 
@@ -138,7 +140,10 @@ int main(){
     std::vector<long> longvectorone;
     std::vector<long> longvectortwo;
 
-    std::string fileName = "edgeStore.db";
+    std::map<long,std::vector<long>> localSubGraphMap;
+
+
+    std::string fileName = "acacia.edgestore.db";
 
     long keyOne = 34;
     long keyTwo = 89;
@@ -146,6 +151,11 @@ int main(){
     longvectorone.push_back(59);
     longvectortwo.push_back(77);
     longvectortwo.push_back(99);
+
+    localSubGraphMap.insert(std::make_pair(keyOne,longvectorone));
+    localSubGraphMap.insert(std::make_pair(keyTwo,longvectortwo));
+
+    int size = localSubGraphMap.size();
 
 
     auto vectorValuesOne = builder.CreateVector(longvectorone);
@@ -158,13 +168,40 @@ int main(){
     edgeStoreEntriesVector.push_back(edgeStoreEntryOne);
     edgeStoreEntriesVector.push_back(edgeStoreEntryTwo);
 
-    auto flatbufferEdgeStoreEntryVector = builder.CreateVector(edgeStoreEntriesVector);
+   // auto flatbufferEdgeStoreEntryVector = builder.CreateVector(edgeStoreEntriesVector);
+
+    auto flatbufferEdgeStoreEntryVector = builder.CreateVectorOfSortedTables(&edgeStoreEntriesVector);
 
     auto edgeStore = CreateEdgeStore(builder,flatbufferEdgeStoreEntryVector);
 
     builder.Finish(edgeStore);
 
     flatbuffers::SaveFile(fileName.c_str(),(const char *)builder.GetBufferPointer(),(size_t)builder.GetSize(),true);
+
+    std::ifstream infile;
+    infile.open("edgeStore.db", std::ios::binary | std::ios::in);
+    infile.seekg(0,std::ios::end);
+    int length = infile.tellg();
+    infile.seekg(0,std::ios::beg);
+    char *data = new char[length];
+    infile.read(data, length);
+    infile.close();
+
+    auto retrievedEdgeStore = GetEdgeStore(data);
+
+    auto allEntries = retrievedEdgeStore->entries();
+
+    auto entry = allEntries->LookupByKey(34);
+
+    auto values = entry->value();
+
+    auto value = values->Get(0);
+
+    /*for (unsigned int i=0;i<allEntries->size();i++) {
+        auto entry = allEntries->LookupByKey("34");
+
+    }*/
+
 
     printf("Successfully Completed");
 
