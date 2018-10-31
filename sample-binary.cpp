@@ -135,6 +135,7 @@ int mainOne(int /*argc*/, const char * /*argv*/ []) {
     printf("The FlatBuffer was successfully created and verified!\n");
 }
 
+/*
 int main(){
     flatbuffers::FlatBufferBuilder builder;
     std::vector<long> longvectorone;
@@ -197,12 +198,14 @@ int main(){
 
     auto value = values->Get(0);
 
-    /*for (unsigned int i=0;i<allEntries->size();i++) {
+    */
+/*for (unsigned int i=0;i<allEntries->size();i++) {
         auto entry = allEntries->LookupByKey("34");
 
-    }*/
+    }*//*
+
 
 
     printf("Successfully Completed");
 
-}
+}*/

@@ -1,6 +1,8 @@
 #include <iostream>
+#include "LocalGraphDatabase.h"
 
-//int main() {
- //   std::cout << "Hello, World!" << std::endl;
- //   return 0;
-//}
+int main() {
+    LocalGraphDatabase* database = new LocalGraphDatabase(1);
+    database->addVertex();
+    return 0;
+}
