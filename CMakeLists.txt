@@ -7,4 +7,4 @@ include_directories("/home/chinthaka/research/flatbuffers/include")
 
 set(SOURCE_FILES )
 
-add_executable(FlatBuffers main.cpp monster_generated.h sample-binary.cpp edgestore_generated.h LocalGraphDatabase.cpp util.cpp util.h LocalGraphDatabase.h AbstractLocalGraph.cpp AbstractLocalGraph.h)
+add_executable(FlatBuffers main.cpp monster_generated.h sample-binary.cpp edgestore_generated.h LocalGraphDatabase.cpp util.cpp util.h LocalGraphDatabase.h AbstractLocalGraph.cpp AbstractLocalGraph.h MetisPartition.cpp MetisPartition.h)
