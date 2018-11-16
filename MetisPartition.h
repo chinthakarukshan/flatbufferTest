@@ -21,29 +21,28 @@ using std::string;
 
 class MetisPartition {
 public:
-    void loadDataSet(string filePath);
     void loadDataSetNew(string filePath);
     void partitionGraph();
 
 private:
-    bool zeroVertexFlag;
-    int nThreads;
-    std::vector<std::map<int,std::unordered_set<int>>> graphStorage;
     idx_t edgeCount;
     idx_t largestVertex;
-    string outputFilePath;
     idx_t vertexCount;
     idx_t nWeights = 1;
-    idx_t nParts = 2;
+    idx_t nParts = 3;
     idx_t objVal;
 
 
     std::map<int,std::set<int>> graphStorageMap;
+    std::map<int,std::set<int>> graphEdgeMap;
+    std::map<int,std::set<int>> partVertexMap;
+    std::map<int,std::map<int,std::set<int>>> partitionedLocalGraphStorageMap;
+    std::map<int,std::map<int,std::set<int>>> masterGraphStorageMap;
     std::vector<int> xadj;
     std::vector<int> adjncy;
 
-    void constructMetisFormat(int adjustEdgeCount);
     void constructMetisFormatNew();
+    void createPartitionFiles(idx_t part[]);
 };
 
 
