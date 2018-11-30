@@ -290,6 +290,7 @@ void MetisPartition::partitionGraph() {
 }
 
 void MetisPartition::createPartitionFiles(idx_t *part) {
+    int totalVertexCount =0;
     for (int vertex = 0;vertex<vertexCount;vertex++) {
         std::cout << vertex << " " << part[vertex] << std::endl;
         idx_t vertexPart = part[vertex];
@@ -345,6 +346,7 @@ void MetisPartition::createPartitionFiles(idx_t *part) {
                     if (!destinationSet.empty()) {
                         for (std::set<int>::iterator itr = destinationSet.begin(); itr != destinationSet.end(); ++itr) {
                             string edge = std::to_string(vertex) + " " + std::to_string((*itr));
+                            totalVertexCount++;
                             localFile<<edge;
                             localFile<<"\n";
 
@@ -366,6 +368,7 @@ void MetisPartition::createPartitionFiles(idx_t *part) {
                     if (!destinationSet.empty()) {
                         for (std::set<int>::iterator itr = destinationSet.begin(); itr != destinationSet.end(); ++itr) {
                             string edge = vertex + " " + (*itr);
+                            totalVertexCount++;
                             masterFile<<edge;
                             masterFile<<"\n";
 
@@ -380,4 +383,6 @@ void MetisPartition::createPartitionFiles(idx_t *part) {
 
 
     }
+    std::cout << "Total VertexCount " << totalVertexCount << std::endl;
+
 }
